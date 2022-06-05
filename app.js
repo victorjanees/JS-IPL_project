@@ -20,8 +20,28 @@ function matchesPlayedPerYear(){
             matchesPerYear.set(i,1)
         }
     }
+    console.log('Matches Played Per Each Year')
     console.log(matchesPerYear)
     }
+
+function matchesWonByEachTeamsOverYears(){
+    let matchesWonByTeams = new Map();
+    let teams = [];
+    for(let i of matchesArray){
+        teams.push(i['winner']);
+        }
+    for (let i of teams){
+        if (matchesWonByTeams.has(i)){
+            matchesWonByTeams.set(i,matchesWonByTeams.get(i)+1)
+        }
+        else{
+            matchesWonByTeams.set(i,1)
+        }
+    }
+    console.log('Matches Won By Each Teams Over Years')
+    console.log(matchesWonByTeams)
+}
     
 
 matchesPlayedPerYear(matchesArray)
+matchesWonByEachTeamsOverYears(matchesArray)
