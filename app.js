@@ -1,10 +1,10 @@
 let csvToJson = require('convert-csv-to-json');
 
 let fileInputName = 'matches.csv'; 
-let fileOutputName = 'myOutputFile.json';
+let deliveriesInput = 'deliveries.csv'
 
 let matchesArray=csvToJson.fieldDelimiter(",").getJsonFromCsv(fileInputName);
-// console.log(matchesArray);
+let deliveriesArray = csvToJson.fieldDelimiter(",").getJsonFromCsv(deliveriesInput);
 
 function matchesPlayedPerYear(){
     let matchesPerYear = new Map();
@@ -20,8 +20,8 @@ function matchesPlayedPerYear(){
             matchesPerYear.set(i,1)
         }
     }
-    console.log('Matches Played Per Each Year')
-    console.log(matchesPerYear)
+    // console.log('Matches Played Per Each Year')
+    // console.log(matchesPerYear)
     }
 
 function matchesWonByEachTeamsOverYears(){
@@ -38,10 +38,38 @@ function matchesWonByEachTeamsOverYears(){
             matchesWonByTeams.set(i,1)
         }
     }
-    console.log('Matches Won By Each Teams Over Years')
-    console.log(matchesWonByTeams)
+    // console.log('Matches Won By Each Teams Over Years')
+    // console.log(matchesWonByTeams)
 }
-    
+
+function findExtraRunsConceededPerTeamsIn2016(){
+      let runsConceededPerTeams = new Map();
+      let match_id =[];
+      for (let i of matchesArray){
+          if (i['season']=='2016'){
+              match_id.push(i['id']);
+          }
+        }
+      for (let i of deliveriesArray){
+          let id = i['match_id'];
+          let bowlingTeam =  i['bowling_team'];
+          let extraRuns = parseInt( i['extra_runs']); 
+
+          for(let item in match_id){
+        if(id == item){
+            if(runsConceededPerTeams.has(bowlingTeam)){
+                runsConceededPerTeams.set(bowlingTeam, runsConceededPerTeams.get(bowlingTeam)+extraRuns)
+            }
+            else{
+                runsConceededPerTeams.set(bowlingTeam,extraRuns)
+            }
+        }
+    }
+    }
+    console.log(runsConceededPerTeams)
+
+}
 
 matchesPlayedPerYear(matchesArray)
 matchesWonByEachTeamsOverYears(matchesArray)
+findExtraRunsConceededPerTeamsIn2016(matchesArray,deliveriesArray)
